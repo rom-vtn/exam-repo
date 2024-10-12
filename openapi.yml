@@ -3,13 +3,14 @@ info:
   title: Sample API doc
   version: 0.0.1 #SemVer
 servers:
-  - url: https://api.example.com/
+  - url: https://api.example.com
     description: Example server
 paths:
-  /stops/:
+  /stops:
     get:
       summary: "Get stops"
       description: "Get all stops"
+      security: []
       parameters:
         - in: query
           name: near-lat
@@ -27,8 +28,8 @@ paths:
           name: distance-meters
           schema:
             type: number
-            min: 0
-            max: 300000
+            minimum: 0
+            maximum: 300000
           required: false
           description: The distance with which to filter the stops, in meters
       responses:
@@ -46,6 +47,7 @@ paths:
     get:
       summary: "Get next departures at the given stop"
       description: "Get the next departures at the given stop"
+      security: []
       parameters:
         - in: path
           name: stopId
@@ -198,12 +200,12 @@ components:
     Latitude:
       description: Latitude
       type: number
-      min: -90
-      max: 90
+      minimum: -90
+      maximum: 90
       example: 49.093485
     Longitude:
       description: Longitude
       type: number
-      min: -180
-      max: 180
+      minimum: -180
+      maximum: 180
       example: 6.230063
