@@ -1,0 +1,13 @@
+services:
+  apihoster:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: exam-api-doc-hoster
+    ports:
+      - "9000:80"
+    develop:
+      watch:
+        - action: rebuild
+          path: .
+          target: .
