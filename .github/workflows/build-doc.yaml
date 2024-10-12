@@ -1,0 +1,23 @@
+name: Build redocly docs
+#NOTE: exam spec says this should go into its own workflow. kinda weird but meh
+on: workflow_call
+jobs:
+  build-docs:
+    name: Build docs
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Setup node"
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: "Install redocly"
+        run: npm install @redocly/cli -g
+      - name: "Checkout"
+        uses: actions/checkout@v4
+      - name: "Run redocly build"
+        run: redocly build-docs ./openapi.yml -o ./index.html
+      - name: "Upload arifact"
+        uses: actions/upload-artifact@v4
+        with:
+          name: api-doc
+          path: ./index.html
