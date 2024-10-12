@@ -1,0 +1,17 @@
+name: OpenAPI CI
+on: push
+jobs:
+  lint:
+    name: Lint the OpenAPI file
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Setup node"
+        uses: action/setup-node@v4
+        with:
+          node-version: 22
+      - name: "Install redocly"
+        run: npm install @redocly/cli -g
+      - name: "Checkout"
+        uses: actions/checkout@v4
+      - name: "Run redocly lint"
+        run: redocly lint /openapi.yml
