@@ -15,9 +15,9 @@ jobs:
       - name: "Checkout"
         uses: actions/checkout@v4
       - name: "Run redocly build"
-        run: redocly build-docs ./openapi.yml -o ./index.html
+        run: redocly build-docs ./openapi.yml -o ./dist/index.html
       - name: "Upload arifact"
         uses: actions/upload-artifact@v4
         with:
-          name: api-doc
-          path: ./index.html
+          name: github-pages
+          path: ./dist
