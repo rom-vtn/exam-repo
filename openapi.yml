@@ -6,6 +6,42 @@ servers:
   - url: https://api.example.com/
     description: Example server
 paths:
+  /stops/:
+    get:
+      summary: "Get stops"
+      description: "Get all stops"
+      parameters:
+        - in: query
+          name: near-lat
+          schema:
+            $ref: '#/components/schemas/Latitude'
+          required: false
+          description: The latitude near which to query
+        - in: query
+          name: near-lon
+          schema:
+            $ref: '#/components/schemas/Longitude'
+          required: false
+          description: The longitude near which to query
+        - in: query
+          name: distance-meters
+          schema:
+            type: number
+            min: 0
+            max: 300000
+          required: false
+          description: The distance with which to filter the stops, in meters
+      responses:
+        "200":
+          description: OK
+          content:
+            "application/json":
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Stop'
+        "500":
+          description: "Internal server error"
   /stops/{stopId}/departures:
     get:
       summary: "Get next departures at the given stop"
@@ -130,16 +166,14 @@ components:
     Stop:
       type: object
       properties:
+        name:
+          description: The stop's name
+          type: string
+          example: "Grandes Écoles"
         lat:
-          description: Latitude
-          type: number
-          min: -90
-          max: 90
-        lon:
-          description: Longitude
-          type: number
-          min: -180
-          max: 180
+          $ref: '#/components/schemas/Latitude'
+        lon:        
+          $ref: '#/components/schemas/Longitude'
     TransitEvent:
       type: object
       properties:
@@ -161,3 +195,15 @@ components:
       type: string
       example: "2024-10-12 09:29:46+0200"
       description: "An ISO 8601 timestamp"
+    Latitude:
+      description: Latitude
+      type: number
+      min: -90
+      max: 90
+      example: 49.093485
+    Longitude:
+      description: Longitude
+      type: number
+      min: -180
+      max: 180
+      example: 6.230063
