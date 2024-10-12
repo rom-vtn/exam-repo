@@ -4,6 +4,9 @@ on:
     tags:
       - 'v[0-9]+.[0-9]+.[0-9]+'
 jobs:
+  build-docs:
+    name: Reuse build action
+    uses: ./.github/workflows/build-doc.yaml
   deploy-docs:
     environment:
       name: github-pages
@@ -12,12 +15,9 @@ jobs:
       pages: write      # to deploy to Pages
       id-token: write   # to verify the deployment originates from an appropriate source
     name: Upload to GH pages
+    needs: [build-docs]
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Reuse build action
-        uses: ./.github/workflows/build-doc.yaml
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
