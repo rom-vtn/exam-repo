@@ -1,0 +1,14 @@
+name: Release CD
+on:
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+jobs:
+  pages-upload:
+    name: Upload to GH pages
+    runs-on: ubuntu-latest
+    steps:
+      - name: Reuse build action
+        uses: ./.github/workflows/build-doc.yml
+      - name: Upload artifact
+        uses: actions/upload-github-pages-artifact
