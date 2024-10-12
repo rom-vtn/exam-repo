@@ -5,4 +5,159 @@ info:
 servers:
   - url: https://api.example.com/
     description: Example server
-paths: {}
+paths:
+  /stops/{stopId}/departures:
+    get:
+      summary: "Get next departures at the given stop"
+      description: "Get the next departures at the given stop"
+      parameters:
+        - in: path
+          name: stopId
+          schema:
+            type: string
+          required: true
+          description: The stop ID to track
+        - in: query
+          name: starting-at
+          required: false
+          description: The timestamp after which to track departures
+          schema:
+            $ref: '#/components/schemas/Timestamp'
+      responses:
+        "200":
+          description: OK
+          content:
+            "application/json":
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TransitEvent'
+        "404":
+          description: "Stop ID not found"
+    post:
+      summary: Add a stop for the given trip
+      description: Add a stop for the given trip at the given station
+      security:
+        - JWTAuth: []
+      parameters:
+        - in: path
+          name: stopId
+          schema:
+            type: string
+          required: true
+      requestBody:
+        description: The departure to be added (as a transit event)
+        required: true
+        content:
+          "application/json":
+            schema:
+              $ref: '#/components/schemas/TransitEvent'
+      responses:
+        "200":
+          description: "OK"
+        "401":
+          description: "Unauthenticated"
+        "403":
+          description: "Unauthorized"
+        "404":
+          description: "Not found - Invalid trip ID or stop ID"
+  /stops/{stopId}/departures/{tripId}:
+    put:
+      summary: Edit a stop for the given trip
+      description: Edit a stop for the given trip at the given station
+      security:
+        - JWTAuth: []
+      parameters:
+        - in: path
+          name: stopId
+          schema:
+            type: string
+          required: true
+        - in: path
+          name: tripId
+          schema:
+            type: string
+          required: true
+      requestBody:
+        description: The departure to be edited (as a transit event)
+        required: true
+        content:
+          "application/json":
+            schema:
+              $ref: '#/components/schemas/TransitEvent'
+      responses:
+        "200":
+          description: "OK"
+        "401":
+          description: "Unauthenticated"
+        "403":
+          description: "Unauthorized"
+        "404":
+          description: "Not found - Invalid trip ID or stop ID"
+    delete:
+      summary: Remove a stop for the given trip
+      description: Remove a stop for the given trip at the given station
+      security:
+        - JWTAuth: []
+      parameters:
+        - in: path
+          name: stopId
+          schema:
+            type: string
+          required: true
+        - in: path
+          name: tripId
+          schema:
+            type: string
+          required: true
+      responses:
+        "200":
+          description: "OK"
+        "401":
+          description: "Unauthenticated"
+        "403":
+          description: "Unauthorized"
+        "404":
+          description: "Not found - Invalid trip ID or stop ID"
+
+components:
+  securitySchemes:
+    JWTAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    Stop:
+      type: object
+      properties:
+        lat:
+          description: Latitude
+          type: number
+          min: -90
+          max: 90
+        lon:
+          description: Longitude
+          type: number
+          min: -180
+          max: 180
+    TransitEvent:
+      type: object
+      properties:
+        timestamp:
+          $ref: '#/components/schemas/Timestamp'
+        tripId:
+          type: string
+          example: "fe506bb9"
+          description: "The (inner) trip ID of the transit taking place"
+        line:
+          type: string
+          example: "MB"
+          description: "The name of the transit line"
+        headsign:
+          type: string
+          example: "Université Saulcy"
+          description: "The headsign of the trip"
+    Timestamp:
+      type: string
+      example: "2024-10-12 09:29:46+0200"
+      description: "An ISO 8601 timestamp"
