@@ -14,4 +14,4 @@ jobs:
       - name: "Checkout"
         uses: actions/checkout@v4
       - name: "Run redocly lint"
-        run: redocly lint /openapi.yml
+        run: redocly lint ./openapi.yml
