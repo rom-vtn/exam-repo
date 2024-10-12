@@ -17,7 +17,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Reuse build action
-        uses: ./.github/workflows/build-doc.yml
+        uses: ./.github/workflows/build-doc.yaml
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
