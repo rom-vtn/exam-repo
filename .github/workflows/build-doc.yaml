@@ -19,5 +19,5 @@ jobs:
       - name: "Upload arifact"
         uses: actions/upload-artifact@v4
         with:
-          name: github-pages
+          name: api-doc
           path: ./dist
